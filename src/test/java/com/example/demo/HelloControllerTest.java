@@ -26,6 +26,13 @@ public class HelloControllerTest {
             .andExpect(content().string("Hello from Spring!"));
     }
 
+    @Test
+    public void testMathPiEndpoint() throws Exception{
+        //localhost:8080
+        this.mvc.perform(get("/math/pi").accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())//200
+                .andExpect(content().string("3.141592653589793"));
 
+    }
 
 }
