@@ -34,4 +34,9 @@ public class MathService {
     public String postingSum(Calculate cal) {
         return cal.sumList();
     }
+
+    @PostMapping("/math/area")
+    public String postingArea(Calculate cal) {
+        return cal.areaValid();
+    }
 }

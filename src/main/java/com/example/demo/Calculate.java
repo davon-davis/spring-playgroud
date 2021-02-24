@@ -7,6 +7,10 @@ public class Calculate {
     String y;
     String operation = "add";
     List<Integer> n;
+    String type;
+    int radius;
+    int width;
+    int height;
 
     public String getX() {
         return x;
@@ -38,6 +42,38 @@ public class Calculate {
 
     public void setN(List<Integer> n) {
         this.n = n;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public String doAdd(){
@@ -77,5 +113,18 @@ public class Calculate {
         result += this.n.get(this.n.size()-1);
 
         return result + " = " + sum;
+    }
+
+    public String areaValid(){
+        String result = "Invalid";
+        if(this.type.equals("circle") && this.radius > 0){
+            result = String.format("Area of a circle with a radius of %d is " +
+                    (Math.PI*(this.radius*this.radius)), this.radius);
+        }else if(this.type.equals("rectangle") && this.width > 0 && this.height > 0){
+            result = String.format("Area of a %dx%d rectangle is " +
+                    (this.width*this.height), this.width, this.height);
+        }
+
+        return result;
     }
 }
