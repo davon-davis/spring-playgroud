@@ -39,4 +39,33 @@ public class MathService {
     public String postingArea(Calculate cal) {
         return cal.areaValid();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
