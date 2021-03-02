@@ -1,20 +1,18 @@
 package com.example.demo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.Date;
 import java.util.List;
 
 public class Flights {
+    @JsonProperty("Departs")
     private Date departs;
+    @JsonProperty("Tickets")
     private List<Tickets> tickets;
 
-    @JsonCreator
-    public Flights(@JsonProperty("Departs")Date departs,
-                   @JsonProperty("Tickets") List<Tickets> tickets) {
+    //@JsonCreator
+    public Flights(Date departs, List<Tickets> tickets) {
         this.departs = departs;
         this.tickets = tickets;
     }
@@ -37,12 +35,13 @@ public class Flights {
     }
 
     static class Tickets{
+        @JsonProperty("Passenger")
         private Person passenger;
+        @JsonProperty("Price")
         private int price;
 
-        @JsonCreator
-        public Tickets(@JsonProperty("Passenger") Person passenger,
-                       @JsonProperty("Price") int price) {
+        //@JsonCreator
+        public Tickets(Person passenger, int price) {
             this.passenger = passenger;
             this.price = price;
         }
@@ -65,12 +64,13 @@ public class Flights {
 
         @JsonInclude(JsonInclude.Include.NON_NULL)
         static class Person{
+            @JsonProperty("FirstName")
             private String firstName;
+            @JsonProperty("LastName")
             private String lastName;
 
-            @JsonCreator
-            public Person(@JsonProperty("FirstName") String firstName,
-                          @JsonProperty("LastName") String lastName) {
+            //@JsonCreator
+            public Person( String firstName, String lastName) {
                 this.firstName = firstName;
                 this.lastName = lastName;
             }

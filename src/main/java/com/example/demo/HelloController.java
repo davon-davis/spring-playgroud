@@ -91,4 +91,11 @@ public class HelloController {
 
         return flightList;
     }
+
+    @PostMapping("/flights/tickets/total")
+    public FlightCalculator addRides(@RequestBody Flights flight){
+        FlightCalculator calc = new FlightCalculator(flight);
+        calc.sum();
+        return calc;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import javax.servlet.http.Cookie;
+
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -94,5 +103,63 @@ public class HelloControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 //.andExpect(jsonPath("$.Tickets[1].Passenger.FirstName", is("Brad")))
                 .andExpect(jsonPath("$[1].Tickets[0].Price", is(400)));
+    }
+
+    @Test
+    public void testStringLiteral() throws Exception {
+        MockHttpServletRequestBuilder request = post("/flights/tickets/total")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"tickets\":[{\"passenger\":{\"firstName\":\"Some name\",\"lastName\":\"Some other name\"}," +
+                        "\"price\":200},{\"passenger\":{\"firstName\":\"Name B\",\"lastName\":\"Name C\"},\"price\":150}]}");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", is(350)));
+
+    }
+
+    ObjectMapper objectMapper = new ObjectMapper();                    // 1
+    @Test
+    public void testJSONObject() throws Exception {
+        String string = "2017-04-21 14:34";
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+        Date depart = format.parse(string);
+
+        Flights.Tickets.Person passenger = new Flights.Tickets.Person("Dave", "Chappelle");
+
+        Flights.Tickets daveTicket = new Flights.Tickets(passenger, 200);
+
+        List<Flights.Tickets> tickets = new ArrayList<>();
+
+        tickets.add(daveTicket);
+
+        Flights flight = new Flights(depart, tickets);
+
+        String json = objectMapper.writeValueAsString(flight);            // 3
+
+        MockHttpServletRequestBuilder request = post("/flights/tickets/total")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);                                         // 4
+
+        this.mvc.perform(request).andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", is(200)));
+    }
+
+    @Test
+    public void testJSONFile() throws Exception {
+        String json = getJSON("/data1.json");
+
+        MockHttpServletRequestBuilder request = post("/flights/tickets/total")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result", is(350)));
+    }
+
+    private String getJSON(String path) throws Exception {
+        URL url = this.getClass().getResource(path);
+        return new String(Files.readAllBytes(Paths.get(url.getFile())));
     }
 }
