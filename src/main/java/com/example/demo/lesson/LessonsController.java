@@ -24,18 +24,13 @@ public class LessonsController {
         return this.repository.save(lesson);
     }
 
-//    @GetMapping("/{id}")
-//    public Optional<Lesson> show(@PathVariable Long id){
-//        return this.repository.findById(id);
-//    }
-
-    @GetMapping("/5")
-    public Optional<Lesson> getFive(){
-        return this.repository.findById(5L);
+    @GetMapping("/{id}")
+    public Optional<Lesson> show(@PathVariable Long id){
+        return this.repository.findById(id);
     }
 
-    @DeleteMapping("/5")
-    public void deleteFive(){
-        this.repository.deleteById(5L);
+    @DeleteMapping("/{id}")
+    public void deleteID(@PathVariable Long id){
+        this.repository.deleteById(id);
     }
 }
