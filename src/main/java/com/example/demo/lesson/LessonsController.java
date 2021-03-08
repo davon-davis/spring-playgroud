@@ -34,4 +34,23 @@ public class LessonsController {
         this.repository.deleteById(id);
 
     }
+
+    @PatchMapping("/{lessonId}")
+    public Lesson updateLesson(@RequestBody Lesson lesson, @PathVariable Long lessonId){
+        //find my original record
+        if(this.repository.existsById(lessonId)){
+            Lesson oldLesson = this.repository.findById(lessonId).get();
+            //update the deliveredOn data
+            oldLesson.setDeliveredOn(lesson.getDeliveredOn());
+            //update the title string
+            oldLesson.setTitle(lesson.getTitle());
+            //save that record back to the database
+            return this.repository.save(oldLesson);
+        } else {
+            return this.repository.save(lesson);
+        }
+
+
+
+    }
 }

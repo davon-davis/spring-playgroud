@@ -27,7 +27,7 @@ import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -76,4 +76,16 @@ public class LessonControllerTest {
                 .andExpect(jsonPath("$.title", is("Racket") ));
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void testUpdate() throws Exception{
+        MockHttpServletRequestBuilder request = patch("/lessons/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"title\":\"Ada\"}");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is("Ada") ));
+    }
 }
