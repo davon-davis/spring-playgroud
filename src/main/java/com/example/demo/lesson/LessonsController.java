@@ -32,5 +32,6 @@ public class LessonsController {
     @DeleteMapping("/{id}")
     public void deleteID(@PathVariable Long id){
         this.repository.deleteById(id);
+
     }
 }
